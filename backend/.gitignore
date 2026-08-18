@@ -1,0 +1,4 @@
+uploads/*
+!uploads/.gitkeep
+!uploads/messes/.gitkeep
+!uploads/rooms/.gitkeep

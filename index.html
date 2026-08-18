@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YaarGharSe — Mess & Room Finder for Students</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="texture"></div>
+<div class="wrap">
+
+  <header>
+    <div class="header-top">
+      <div class="sign-tag">YaarGharSe &middot; open now</div>
+      <div id="auth-area">
+        <button class="auth-btn" id="open-login-btn">Login</button>
+      </div>
+    </div>
+    <h1 class="display">Ghar jaisa mess & <span>rooms nearby</span></h1>
+    <p class="sub">YaarGharSe helps students find a tiffin service for meals and a PG or hostel room to stay — both ranked by distance from your hostel, like a dost pointing the way.</p>
+
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="mess">🍱 Mess <span class="n" id="mess-tab-count">8</span></button>
+      <button class="tab-btn" data-tab="room">🛏 Rooms & PG <span class="n" id="room-tab-count">8</span></button>
+    </div>
+  </header>
+
+  <!-- ============ MESS BOARD ============ -->
+  <section id="panel-mess">
+    <div class="board">
+      <div class="search-row">
+        <div class="search-box">
+          <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="mess-search" type="text" placeholder="Search by name or cuisine — thali, dosa, biryani…" autocomplete="off">
+        </div>
+        <button class="locate-btn" data-locate-for="mess">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+          Use my location
+        </button>
+      </div>
+      <div class="mono" id="mess-locate-status" style="font-size:12px;color:var(--steel);margin-top:10px;min-height:16px;">Showing distances from a default point near campus. Tap "Use my location" for accurate results.</div>
+
+      <div class="filter-row">
+        <div class="filter-group">
+          <div class="filter-label">Type</div>
+          <div class="chip-row" id="mess-type-filters">
+            <button class="chip active" data-val="all">All</button>
+            <button class="chip" data-val="veg">Veg</button>
+            <button class="chip" data-val="nonveg">Non-veg</button>
+            <button class="chip" data-val="both">Both</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Budget / meal</div>
+          <div class="chip-row" id="mess-price-filters">
+            <button class="chip active" data-val="all">Any</button>
+            <button class="chip" data-val="low">Under ₹90</button>
+            <button class="chip" data-val="mid">₹90–120</button>
+            <button class="chip" data-val="high">₹120+</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Sort by</div>
+          <select class="sort-select" id="mess-sort">
+            <option value="distance">Nearest first</option>
+            <option value="rating">Top rated</option>
+            <option value="price">Cheapest first</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-meta">
+      <div class="count"><b id="mess-result-count">8</b> messes found</div>
+      <div class="note mono" id="mess-origin-note">origin: default campus point</div>
+    </div>
+    <div class="grid" id="mess-grid"></div>
+  </section>
+
+  <!-- ============ ROOMS BOARD ============ -->
+  <section id="panel-room" class="hidden">
+    <div class="board">
+      <div class="search-row">
+        <div class="search-box">
+          <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="room-search" type="text" placeholder="Search by name or facility — WiFi, AC, single room…" autocomplete="off">
+        </div>
+        <button class="locate-btn" data-locate-for="room">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+          Use my location
+        </button>
+      </div>
+      <div class="mono" id="room-locate-status" style="font-size:12px;color:var(--steel);margin-top:10px;min-height:16px;">Showing distances from a default point near campus. Tap "Use my location" for accurate results.</div>
+
+      <div class="filter-row">
+        <div class="filter-group">
+          <div class="filter-label">For</div>
+          <div class="chip-row" id="room-gender-filters">
+            <button class="chip active" data-val="all">All</button>
+            <button class="chip" data-val="boys">Boys</button>
+            <button class="chip" data-val="girls">Girls</button>
+            <button class="chip" data-val="coed">Co-ed</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Room type</div>
+          <div class="chip-row" id="room-type-filters">
+            <button class="chip active" data-val="all">All</button>
+            <button class="chip" data-val="single">Single</button>
+            <button class="chip" data-val="shared">Shared</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Budget / month</div>
+          <div class="chip-row" id="room-price-filters">
+            <button class="chip active" data-val="all">Any</button>
+            <button class="chip" data-val="low">Under ₹5,000</button>
+            <button class="chip" data-val="mid">₹5,000–8,000</button>
+            <button class="chip" data-val="high">₹8,000+</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-label">Sort by</div>
+          <select class="sort-select" id="room-sort">
+            <option value="distance">Nearest first</option>
+            <option value="rating">Top rated</option>
+            <option value="price">Cheapest first</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="filter-row" style="margin-top:14px;padding-top:14px;">
+        <div class="filter-group" style="width:100%;">
+          <div class="filter-label">Facilities</div>
+          <div class="chip-row" id="room-facility-filters">
+            <button class="chip" data-val="WiFi">WiFi</button>
+            <button class="chip" data-val="AC">AC</button>
+            <button class="chip" data-val="Attached Bath">Attached Bath</button>
+            <button class="chip" data-val="Laundry">Laundry</button>
+            <button class="chip" data-val="Meals Included">Meals Included</button>
+            <button class="chip" data-val="Power Backup">Power Backup</button>
+            <button class="chip" data-val="Parking">Parking</button>
+            <button class="chip" data-val="Furnished">Furnished</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-meta">
+      <div class="count"><b id="room-result-count">8</b> rooms found</div>
+      <div class="note mono" id="room-origin-note">origin: default campus point</div>
+    </div>
+    <div class="grid" id="room-grid"></div>
+  </section>
+
+  <footer>YAARGHARSE — DEMO DATA — MESS + ROOM LISTINGS FOR STUDENTS WHO ARE TIRED OF GUESSING</footer>
+</div>
+
+<!-- ============ AUTH MODAL ============ -->
+<div class="modal-overlay hidden" id="auth-overlay">
+  <div class="modal-box">
+    <button class="modal-close" id="close-auth-btn">&times;</button>
+
+    <div class="auth-tabs">
+      <button class="auth-tab-btn active" data-authtab="login">Login</button>
+      <button class="auth-tab-btn" data-authtab="register">Register</button>
+    </div>
+
+    <!-- Login form -->
+    <form id="login-form" class="auth-form">
+      <div class="field">
+        <label for="login-email">Email</label>
+        <input type="email" id="login-email" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="login-password">Password</label>
+        <input type="password" id="login-password" required autocomplete="current-password">
+      </div>
+      <div class="auth-error mono" id="login-error"></div>
+      <button type="submit" class="auth-submit-btn">Log In</button>
+    </form>
+
+    <!-- Register form -->
+    <form id="register-form" class="auth-form hidden">
+      <div class="field">
+        <label for="reg-name">Name</label>
+        <input type="text" id="reg-name" required autocomplete="name">
+      </div>
+      <div class="field">
+        <label for="reg-email">Email</label>
+        <input type="email" id="reg-email" required autocomplete="email">
+      </div>
+      <div class="field">
+        <label for="reg-phone">Phone</label>
+        <input type="tel" id="reg-phone" required autocomplete="tel">
+      </div>
+      <div class="field">
+        <label for="reg-password">Password</label>
+        <input type="password" id="reg-password" required minlength="6" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label for="reg-role">I am a</label>
+        <select id="reg-role">
+          <option value="student">Student (looking for mess/room)</option>
+          <option value="mess_owner">Mess Owner (list my mess)</option>
+          <option value="room_owner">Room/PG Owner (list my room)</option>
+        </select>
+      </div>
+      <div class="auth-error mono" id="register-error"></div>
+      <button type="submit" class="auth-submit-btn">Create Account</button>
+    </form>
+  </div>
+</div>
+
+<!-- ============ DASHBOARD MODAL (owner / admin) ============ -->
+<div class="modal-overlay hidden" id="dash-overlay">
+  <div class="modal-box dash-box">
+    <button class="modal-close" id="close-dash-btn">&times;</button>
+    <div id="dash-content"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
